@@ -1,0 +1,21 @@
+BIOS= # "BIOS" "UEFI"
+DISK= # sda nvme0n1
+
+NFS= # "" "nfs" "pacserve"
+NFS_PATH=
+
+CONNECTION= # "wifi" "eth"
+ESSID=
+
+WIFI_CONFIG= # "DESCRIPTION:ESSID:PASSWORD[;DESCRIPTION:ESSID:PASSWORD]*"
+
+HOSTNAME=
+USERNAME=
+AUTOLOGIN= # autologin
+SSH= # "yes" "no"
+SSH_HOST=
+
+VGA= # "nvidia" "amd"
+DEVEL= # "yes" "no"
+DDCLIENT_CONFIG= # "HOSTNAME:USERNAME:PASSWORD"
+
