@@ -168,7 +168,8 @@ CREATE_HOME_SCRIPTS(){
 
 	local user=${1}
 
-	echo '[[ -f ~/.bashrc ]] && . ~/.bashrc
+	echo '#echo ${user} | sudo -S modprobe nct6775 force_id=0xd120
+[[ -f ~/.bashrc ]] && . ~/.bashrc
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
     exec startx
 fi' > .bash_profile
@@ -183,6 +184,12 @@ localhost" > .vnc/config
 unset SESSION_MANAGER
 exec /home/${user}/.xinitrc" > .vnc/xstartup
 chmod +x .vnc/xstartup
+
+GIT_CONFIG(){
+	echo "[user]
+	name = ${GIT_USERNAME}
+	email = ${GIT_EMAIL}" > .gitconfig
+}
 
 	if [ $(GET_BATTERY) == "battery" ]; then
 
@@ -224,7 +231,12 @@ chmod +x .xinitrc
 
 		echo 'DATETIME=`date +"%Y-%m-%d %H:%M:%S"`
 xsetroot -name "> ${HOSTNAME} ${DATETIME} <"' > .xsetroot.sh
-	
+		echo 'DATETIME=`date +"%Y-%m-%d %H:%M:%S"`
+T_CPU=$(sensors | grep CPUTIN | cut -d" " -f18)
+nv=$(nvidia-smi -x -q)
+T_GPU=$(echo  $nv | xmllint --xpath ''//gpu_temp'' - | sed ''s/<gpu_temp>//g'' | sed ''s/<\/gpu_temp>/ /g'')
+xsetroot -name "CPU: ${T_CPU} GPU: ${T_GPU} > ${HOSTNAME} ${DATETIME} <"' > .xsetroot.sh
+
 	fi
 }
 
@@ -379,7 +391,7 @@ USER(){
 	systemctl --user enable vncserver@:1
 
 #	INSTALL_YAOURT $user
-	
+#	AUR_INSTALL nct677x-git ${user}
 	AUR_INSTALL st ${user}
 	AUR_INSTALL dwm ${user}
 	echo ${user} | sudo -S mv /usr/bin/st /usr/bin/st.back
